@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>XITFORGE</title>
+<style>
+body{margin:0;background:#070b14;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+.card{background:#111827;border:1px solid #263043;border-radius:18px;padding:16px;margin:12px 0}
+.muted{color:#94a3b8;font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+</style>
+</head>
+<body>
+<h1>XITFORGE</h1>
+<div class="muted" id="status">Cargando configuración...</div>
+<div id="options"></div>
+<script>
+const API = location.origin;
+async function cargarConfig(){
+  const r=await fetch(API+'api/xitforge/config');
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+function render(config){
+  document.getElementById('status').textContent='Actualizado: '+new Date(config.lastUpdated).toLocaleString();
+  const root=document.getElementById('options'); root.innerHTML='';
+  for(const opt of (config.options||[])){
+    const card=document.createElement('div'); card.className='card';
+    const row=document.createElement('div'); row.className='row';
+    const left=document.createElement('div');
+    const title=document.createElement('div'); title.textContent=opt.name||'Opción'; title.style.fontWeight='700';
+    const desc=document.createElement('div'); desc.className='muted'; desc.textContent=opt.description||'';
+    left.append(title,desc); row.append(left);
+    if(opt.type==='switch'){
+      const input=document.createElement('input'); input.type='checkbox'; input.checked=!!opt.enabled; row.append(input);
+    } else if(opt.type==='slider'){
+      const input=document.createElement('input'); input.type='range';
+      input.min=opt.min??0; input.max=opt.max??100; input.step=opt.step??1; input.value=opt.value??input.min; card.append(input);
+    } else if(opt.type==='select'){
+      const select=document.createElement('select');
+      for(const v of (opt.options||[])){ const o=document.createElement('option'); o.value=v; o.textContent=v; o.selected=v===opt.selectedOption; select.append(o); }
+      card.append(select);
+    } else if(opt.type==='button'){
+      const button=document.createElement('button'); button.textContent=opt.name||'Ejecutar'; card.append(button);
+    }
+    card.prepend(row); root.append(card);
+  }
+}
+cargarConfig().then(render).catch(err=>document.getElementById('status').textContent='Error: '+err.message);
+</script>
+</body>
+</html>

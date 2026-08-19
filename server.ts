@@ -143,6 +143,14 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT || 3000);
 
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") return res.sendStatus(204);
+    next();
+  });
+
   app.use(express.json());
 
   app.get("/api/health", (_req, res) => {
@@ -204,6 +212,32 @@ async function startServer() {
       res.json({ success: true, option: optionWithId, totalOptions: currentConfig.options.length });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error al crear la opción';
+      res.status(500).json({ error: message });
+    }
+  });
+
+  app.put("/api/xitforge/options/:id", (req, res) => {
+    try {
+      const { id } = req.params;
+      const index = currentConfig.options.findIndex((opt) => opt.id === id);
+      if (index < 0) return res.status(404).json({ error: "Opción no encontrada" });
+
+      currentConfig.options[index] = {
+        ...currentConfig.options[index],
+        ...(req.body as Partial<OptionItem>),
+        id,
+      };
+
+      const category = currentConfig.options[index].category;
+      if (category && !currentConfig.categories.includes(category)) {
+        currentConfig.categories.push(category);
+      }
+
+      currentConfig.lastUpdated = new Date().toISOString();
+      saveConfig(currentConfig);
+      res.json({ success: true, option: currentConfig.options[index] });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Error al actualizar";
       res.status(500).json({ error: message });
     }
   });
