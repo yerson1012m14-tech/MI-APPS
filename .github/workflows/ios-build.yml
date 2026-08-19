@@ -3,11 +3,13 @@ name: Build XITFORGE IPA
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: macos-14
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -15,16 +17,43 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
 
+      - name: Clean
+        run: |
+          xcodebuild \
+            -project ios/XITFORGE.xcodeproj \
+            -scheme XITFORGE \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            clean
+
       - name: Build archive
         run: |
-          xcodebuild             -project ios/XITFORGE.xcodeproj             -scheme XITFORGE             -configuration Release             -sdk iphoneos             -archivePath $RUNNER_TEMP/XITFORGE.xcarchive             archive             CODE_SIGNING_ALLOWED=NO             CODE_SIGNING_REQUIRED=NO
+          xcodebuild \
+            -project ios/XITFORGE.xcodeproj \
+            -scheme XITFORGE \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/XITFORGE.xcarchive" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            PRODUCT_NAME=XITFORGE \
+            EXECUTABLE_NAME=XITFORGE
+
+      - name: Verify app
+        run: |
+          test -d "$RUNNER_TEMP/XITFORGE.xcarchive/Products/Applications/XITFORGE.app"
+          echo "XITFORGE.app encontrado correctamente."
 
       - name: Package unsigned IPA
         run: |
-          mkdir -p $RUNNER_TEMP/Payload
-          cp -R $RUNNER_TEMP/XITFORGE.xcarchive/Products/Applications/XITFORGE.app $RUNNER_TEMP/Payload/
-          cd $RUNNER_TEMP
-          zip -r XITFORGE-unsigned.ipa Payload
+          rm -rf "$RUNNER_TEMP/Payload"
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$RUNNER_TEMP/XITFORGE.xcarchive/Products/Applications/XITFORGE.app" "$RUNNER_TEMP/Payload/XITFORGE.app"
+          cd "$RUNNER_TEMP"
+          zip -r "XITFORGE-unsigned.ipa" Payload
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
