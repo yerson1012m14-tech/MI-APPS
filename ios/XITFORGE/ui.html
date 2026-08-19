@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>XITFORGE</title>
+<style>
+body{margin:0;background:#070b14;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+.card{background:#111827;border:1px solid #263043;border-radius:18px;padding:16px;margin:12px 0}
+small{color:#94a3b8}
+</style>
+</head>
+<body>
+<h1>XITFORGE</h1>
+<small id="status">Cargando...</small>
+<div id="options"></div>
+<script>
+async function loadConfig(){
+  const r=await fetch('/api/xitforge/config');
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+function render(cfg){
+  document.getElementById('status').textContent='Actualizado: '+new Date(cfg.lastUpdated).toLocaleString();
+  const root=document.getElementById('options'); root.innerHTML='';
+  (cfg.options||[]).forEach(opt=>{
+    const card=document.createElement('div'); card.className='card';
+    const t=document.createElement('div'); t.textContent=opt.name; t.style.fontWeight='700';
+    const d=document.createElement('small'); d.textContent=opt.description||'';
+    card.append(t,d);
+    if(opt.type==='switch'){
+      const i=document.createElement('input'); i.type='checkbox'; i.checked=!!opt.enabled; card.append(i);
+    }
+    if(opt.type==='slider'){
+      const i=document.createElement('input'); i.type='range'; i.min=opt.min||0; i.max=opt.max||100; i.step=opt.step||1; i.value=opt.value??50; card.append(i);
+    }
+    if(opt.type==='select'){
+      const s=document.createElement('select');
+      (opt.options||[]).forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;o.selected=v===opt.selectedOption;s.append(o)});
+      card.append(s);
+    }
+    root.append(card);
+  });
+}
+loadConfig().then(render).catch(e=>document.getElementById('status').textContent='Error: '+e.message);
+</script>
+</body></html>
