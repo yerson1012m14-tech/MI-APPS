@@ -6,7 +6,9 @@ import {
   Settings,
   Flame,
   ShieldCheck,
-  Lock
+  Lock,
+  Cpu,
+  Server
 } from 'lucide-react';
 import { LicenseSession } from './AccessGate';
 import { useSettings } from '../utils/settingsContext';
@@ -55,23 +57,37 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            {/* Top Right Actions */}
+            {/* Top Right Actions: PANEL PC BUTTON + Status */}
             <div className="flex items-center space-x-2">
+              {/* BOTÓN DIRECTO: PANEL PC (ADMIN) */}
+              <button
+                onClick={() => setActiveTab(activeTab === 'admin' ? 'home' : 'admin')}
+                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all active:scale-95 shadow-md border ${
+                  activeTab === 'admin'
+                    ? 'bg-blue-600 text-white border-blue-400 shadow-blue-500/30'
+                    : 'bg-slate-800 hover:bg-slate-700 text-blue-400 border-slate-700 hover:border-blue-500/40'
+                }`}
+                title="Abrir Panel de Control PC (Creador / Admin)"
+              >
+                <Server className="w-3.5 h-3.5" />
+                <span>Panel PC</span>
+              </button>
+
               {licenseSession && (
                 <button
                   onClick={() => setActiveTab('license')}
-                  className="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold transition-all active:scale-95"
+                  className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold transition-all active:scale-95"
                   title="Ver Licencia y Tiempo"
                 >
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  <span className="max-w-[100px] truncate">{licenseSession.tier}</span>
+                  <span className="max-w-[80px] truncate">{licenseSession.tier}</span>
                 </button>
               )}
 
               {onLock && (
                 <button
                   onClick={onLock}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-300 border border-slate-700 text-xs font-mono transition-all active:scale-95"
+                  className="p-1.5 rounded-xl bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-300 border border-slate-700 text-xs font-mono transition-all active:scale-95"
                   title="Bloquear"
                 >
                   <Lock className="w-3.5 h-3.5" />

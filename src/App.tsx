@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { HomeDashboard } from './components/HomeDashboard';
 import { SettingsView } from './components/SettingsView';
 import { LicenseView } from './components/LicenseView';
+import { AdminPanel } from './components/AdminPanel';
 import { AccessGate, LicenseSession } from './components/AccessGate';
 import { CyberBackground } from './components/CyberBackground';
 
@@ -48,10 +49,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
-      {/* Dynamic Animated Cyber Background (Rayos & Bolitas) */}
+      {/* Dynamic Animated Cyber Background */}
       <CyberBackground />
 
-      {/* Top Header & Bottom iOS TabBar (🏠 Inicio, 🔑 Licencia & ⚙️ Ajustes) */}
+      {/* Top Header & Bottom iOS TabBar (🏠 Inicio, 🔑 Licencia & ⚙️ Ajustes + 💻 Panel PC) */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -62,7 +63,11 @@ export default function App() {
       {/* Main Content Area - Native iOS Mobile & Tablet Layout */}
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-5 pb-28 relative z-10">
         {activeTab === 'home' && (
-          <HomeDashboard />
+          <HomeDashboard onOpenAdmin={() => setActiveTab('admin')} />
+        )}
+
+        {activeTab === 'admin' && (
+          <AdminPanel onClose={() => setActiveTab('home')} />
         )}
 
         {activeTab === 'license' && (

@@ -7,18 +7,19 @@ import {
   Zap, 
   ArrowRight,
   RefreshCw,
-  Sliders,
-  ShieldCheck,
-  Radio,
-  SlidersHorizontal,
   Server,
-  Settings
+  Cpu,
+  Plus
 } from 'lucide-react';
 import { AdminPanel, OptionItem } from './AdminPanel';
 
 export type FreeFireVersion = 'normal' | 'max';
 
-export const HomeDashboard: React.FC = () => {
+interface HomeDashboardProps {
+  onOpenAdmin?: () => void;
+}
+
+export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onOpenAdmin }) => {
   const { theme } = useSettings();
   
   const [selectedGame, setSelectedGame] = useState<FreeFireVersion | null>(() => {
@@ -37,7 +38,6 @@ export const HomeDashboard: React.FC = () => {
     }
   });
 
-  const [isAdminMode, setIsAdminMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
   const [loadingOptions, setLoadingOptions] = useState(false);
   const [options, setOptions] = useState<OptionItem[]>([]);
@@ -127,39 +127,13 @@ export const HomeDashboard: React.FC = () => {
     return opt.category.toLowerCase() === activeCategory.toLowerCase();
   });
 
-  // SI ESTÁ EN MODO PANEL XITFORGE (ADMIN / CREADOR)
-  if (isAdminMode) {
-    return (
-      <div className="w-full max-w-lg mx-auto py-2 animate-in fade-in duration-200">
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-          <button
-            onClick={() => {
-              setIsAdminMode(false);
-              fetchGameOptions();
-            }}
-            className="flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs font-mono text-slate-300 border border-slate-700 transition-all"
-          >
-            <span>← Volver a la App (IPA)</span>
-          </button>
-
-          <span className="text-[11px] font-mono text-emerald-400 font-bold flex items-center space-x-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Servidor API Conectado</span>
-          </span>
-        </div>
-
-        <AdminPanel onClose={() => setIsAdminMode(false)} />
-      </div>
-    );
-  }
-
   // VISTA 2: XITFORGE IPA (JUEGO / OPCIONES EN TIEMPO REAL DESDE LA API)
   if (isConfirmed && selectedGame) {
     const isNormal = selectedGame === 'normal';
 
     return (
       <div className="w-full max-w-lg mx-auto space-y-4 py-2 animate-in fade-in zoom-in-95 duration-200">
-        {/* Barra superior: Juego Activo + Botón Admin Creador + Botón Cambiar */}
+        {/* Barra superior: Juego Activo + Botón Panel PC + Botón Cambiar */}
         <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg font-mono">
           <div className="flex items-center space-x-3">
             <div
@@ -196,14 +170,16 @@ export const HomeDashboard: React.FC = () => {
 
           <div className="flex items-center space-x-1.5">
             {/* Botón de Acceso a PANEL XITFORGE (Para Gestionar Opciones en PC) */}
-            <button
-              onClick={() => setIsAdminMode(true)}
-              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-[11px] text-blue-400 border border-slate-700 transition-all font-bold"
-              title="Abrir Panel XITFORGE (Admin / Creador)"
-            >
-              <Server className="w-3 h-3 text-blue-400" />
-              <span>Panel PC</span>
-            </button>
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 active:scale-95 text-[11px] text-blue-400 border border-blue-500/40 transition-all font-bold"
+                title="Abrir Panel XITFORGE (Admin / Creador)"
+              >
+                <Server className="w-3.5 h-3.5" />
+                <span>Panel PC</span>
+              </button>
+            )}
 
             <button
               onClick={handleBackToSelect}
@@ -250,14 +226,16 @@ export const HomeDashboard: React.FC = () => {
         ) : filteredOptions.length === 0 ? (
           <div className="p-8 text-center bg-slate-900/50 rounded-3xl border border-slate-800 text-xs font-mono text-slate-400 space-y-3">
             <p>Aún no has agregado opciones para este juego en el Panel XITFORGE.</p>
-            <button
-              onClick={() => setIsAdminMode(true)}
-              className="px-4 py-2 rounded-xl text-white font-bold text-xs shadow-lg transition-all active:scale-95 inline-flex items-center space-x-1.5"
-              style={{ backgroundColor: theme.hex }}
-            >
-              <Server className="w-3.5 h-3.5" />
-              <span>Abrir Panel XITFORGE y Crear Opción</span>
-            </button>
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className="px-4 py-2 rounded-xl text-white font-bold text-xs shadow-lg transition-all active:scale-95 inline-flex items-center space-x-1.5"
+                style={{ backgroundColor: theme.hex }}
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Abrir Panel PC y Crear Opción</span>
+              </button>
+            )}
           </div>
         ) : (
           <div className="space-y-2.5">
@@ -536,6 +514,19 @@ export const HomeDashboard: React.FC = () => {
           >
             <span>Confirmar</span>
             <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* ACCESO DIRECTO AL PANEL PC (ADMIN) */}
+      {onOpenAdmin && (
+        <div className="pt-3 border-t border-slate-900 text-center">
+          <button
+            onClick={onOpenAdmin}
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800 text-slate-400 hover:text-blue-400 text-xs font-mono transition-all active:scale-95 shadow-sm"
+          >
+            <Server className="w-3.5 h-3.5 text-blue-400" />
+            <span>Abrir Panel de Control PC (Administrador)</span>
           </button>
         </div>
       )}

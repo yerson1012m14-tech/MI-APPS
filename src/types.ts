@@ -1,4 +1,4 @@
-export type ActiveTab = 'home' | 'license' | 'settings';
+export type ActiveTab = 'home' | 'license' | 'settings' | 'admin';
 
 export interface GitHubAsset {
   id: number;
