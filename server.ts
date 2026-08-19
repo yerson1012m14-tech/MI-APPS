@@ -34,22 +34,15 @@ export interface XitforgeConfig {
   options: OptionItem[];
 }
 
+const DATA_DIR = path.join(process.cwd(), 'data');
+const CONFIG_FILE = path.join(DATA_DIR, 'xitforge.json');
+
 const DEFAULT_CONFIG: XitforgeConfig = {
   version: "3.0.0",
   lastUpdated: new Date().toISOString(),
   games: [
-    {
-      id: "normal",
-      name: "FREE FIRE NORMAL",
-      badge: "NORMAL",
-      description: "Versión Estándar / Clásica"
-    },
-    {
-      id: "max",
-      name: "FREE FIRE MAX",
-      badge: "MAX HD",
-      description: "Versión Ultra Gráficos HD"
-    }
+    { id: "normal", name: "FREE FIRE NORMAL", badge: "NORMAL", description: "Versión Estándar / Clásica" },
+    { id: "max", name: "FREE FIRE MAX", badge: "MAX HD", description: "Versión Ultra Gráficos HD" }
   ],
   categories: ["Todos", "General", "Sensibilidad", "Optimización", "Pantalla", "Especiales"],
   options: [
@@ -110,61 +103,83 @@ const DEFAULT_CONFIG: XitforgeConfig = {
   ]
 };
 
-// In-memory / persistent config storage
-let currentConfig: XitforgeConfig = { ...DEFAULT_CONFIG };
+function cloneDefault(): XitforgeConfig {
+  return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+}
+
+function loadConfig(): XitforgeConfig {
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    if (!fs.existsSync(CONFIG_FILE)) {
+      const fresh = cloneDefault();
+      fs.writeFileSync(CONFIG_FILE, JSON.stringify(fresh, null, 2), 'utf8');
+      return fresh;
+    }
+    const raw = fs.readFileSync(CONFIG_FILE, 'utf8');
+    const parsed = JSON.parse(raw) as Partial<XitforgeConfig>;
+    return {
+      ...cloneDefault(),
+      ...parsed,
+      games: Array.isArray(parsed.games) ? parsed.games : cloneDefault().games,
+      categories: Array.isArray(parsed.categories) ? parsed.categories : cloneDefault().categories,
+      options: Array.isArray(parsed.options) ? parsed.options : cloneDefault().options,
+    };
+  } catch (error) {
+    console.error('No se pudo cargar xitforge.json:', error);
+    return cloneDefault();
+  }
+}
+
+function saveConfig(config: XitforgeConfig) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  const temp = `${CONFIG_FILE}.tmp`;
+  fs.writeFileSync(temp, JSON.stringify(config, null, 2), 'utf8');
+  fs.renameSync(temp, CONFIG_FILE);
+}
+
+let currentConfig: XitforgeConfig = loadConfig();
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 3000);
 
   app.use(express.json());
 
-  // API Health Endpoint
-  app.get("/api/health", (req, res) => {
+  app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", service: "XITFORGE Backend API", timestamp: new Date().toISOString() });
   });
 
-  // 1. GET API / JSON: Retorna la configuración completa para la IPA / App
   app.get("/api/xitforge/config", (req, res) => {
     const gameQuery = req.query.game as string | undefined;
-    
-    if (gameQuery && (gameQuery === 'normal' || gameQuery === 'max')) {
-      const filteredOptions = currentConfig.options.filter(
-        (opt) => opt.game === 'all' || opt.game === gameQuery
-      );
-      return res.json({
-        ...currentConfig,
-        options: filteredOptions
-      });
+    if (gameQuery === 'normal' || gameQuery === 'max') {
+      const filteredOptions = currentConfig.options.filter((opt) => opt.game === 'all' || opt.game === gameQuery);
+      return res.json({ ...currentConfig, options: filteredOptions });
     }
-
     res.json(currentConfig);
   });
 
-  // 2. POST API / JSON: Actualiza o Guarda la configuración desde el PANEL XITFORGE
   app.post("/api/xitforge/config", (req, res) => {
     try {
-      const newConfig = req.body;
+      const newConfig = req.body as Partial<XitforgeConfig>;
       if (!newConfig || !Array.isArray(newConfig.options)) {
         return res.status(400).json({ error: 'Formato inválido. Debe incluir array "options".' });
       }
-
       currentConfig = {
         ...currentConfig,
         ...newConfig,
         lastUpdated: new Date().toISOString(),
       };
-
+      saveConfig(currentConfig);
       res.json({ success: true, message: 'Configuración XITFORGE actualizada con éxito', config: currentConfig });
-    } catch (err: any) {
-      res.status(500).json({ error: err.message || 'Error al guardar la configuración' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al guardar la configuración';
+      res.status(500).json({ error: message });
     }
   });
 
-  // 3. POST API: Agregar una opción individual rápidamente
   app.post("/api/xitforge/options", (req, res) => {
     try {
-      const newOption: OptionItem = req.body;
+      const newOption = req.body as OptionItem;
       if (!newOption.name || !newOption.type) {
         return res.status(400).json({ error: 'Nombre y tipo son obligatorios' });
       }
@@ -175,42 +190,40 @@ async function startServer() {
         id,
         game: newOption.game || 'all',
         category: newOption.category || 'General',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
-      // Si no existe la categoría, agregarla
       if (optionWithId.category && !currentConfig.categories.includes(optionWithId.category)) {
         currentConfig.categories.push(optionWithId.category);
       }
 
       currentConfig.options.unshift(optionWithId);
       currentConfig.lastUpdated = new Date().toISOString();
+      saveConfig(currentConfig);
 
       res.json({ success: true, option: optionWithId, totalOptions: currentConfig.options.length });
-    } catch (err: any) {
-      res.status(500).json({ error: err.message });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al crear la opción';
+      res.status(500).json({ error: message });
     }
   });
 
-  // 4. DELETE API: Eliminar una opción
   app.delete("/api/xitforge/options/:id", (req, res) => {
     const { id } = req.params;
-    currentConfig.options = currentConfig.options.filter(opt => opt.id !== id);
+    const before = currentConfig.options.length;
+    currentConfig.options = currentConfig.options.filter((opt) => opt.id !== id);
     currentConfig.lastUpdated = new Date().toISOString();
-    res.json({ success: true, id, totalOptions: currentConfig.options.length });
+    saveConfig(currentConfig);
+    res.json({ success: true, id, deleted: before !== currentConfig.options.length, totalOptions: currentConfig.options.length });
   });
 
-  // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
+    const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
@@ -220,4 +233,7 @@ async function startServer() {
   });
 }
 
-startServer();
+startServer().catch((error) => {
+  console.error('No se pudo iniciar XITFORGE:', error);
+  process.exit(1);
+});

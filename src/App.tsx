@@ -4,14 +4,13 @@ import { Navbar } from './components/Navbar';
 import { HomeDashboard } from './components/HomeDashboard';
 import { SettingsView } from './components/SettingsView';
 import { LicenseView } from './components/LicenseView';
-import { AdminPanel } from './components/AdminPanel';
+import { AdminView } from './components/AdminView';
 import { AccessGate, LicenseSession } from './components/AccessGate';
 import { CyberBackground } from './components/CyberBackground';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
 
-  // License Session state
   const [licenseSession, setLicenseSession] = useState<LicenseSession | null>(() => {
     try {
       const stored = localStorage.getItem('xitforge_license_session');
@@ -42,17 +41,14 @@ export default function App() {
     setLicenseSession(null);
   };
 
-  // If no valid license session is set, show the XITFORGE Access Gate
   if (!licenseSession) {
     return <AccessGate onUnlock={handleUnlock} />;
   }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
-      {/* Dynamic Animated Cyber Background */}
       <CyberBackground />
 
-      {/* Top Header & Bottom iOS TabBar (🏠 Inicio, 🔑 Licencia & ⚙️ Ajustes + 💻 Panel PC) */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -60,15 +56,8 @@ export default function App() {
         onLock={handleLock}
       />
 
-      {/* Main Content Area - Native iOS Mobile & Tablet Layout */}
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-5 pb-28 relative z-10">
-        {activeTab === 'home' && (
-          <HomeDashboard onOpenAdmin={() => setActiveTab('admin')} />
-        )}
-
-        {activeTab === 'admin' && (
-          <AdminPanel onClose={() => setActiveTab('home')} />
-        )}
+        {activeTab === 'home' && <HomeDashboard />}
 
         {activeTab === 'license' && (
           <LicenseView
@@ -78,9 +67,9 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'settings' && (
-          <SettingsView />
-        )}
+        {activeTab === 'settings' && <SettingsView />}
+
+        {activeTab === 'admin' && <AdminView />}
       </main>
     </div>
   );

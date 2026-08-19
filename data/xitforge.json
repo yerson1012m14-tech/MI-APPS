@@ -1,0 +1,20 @@
+{
+  "version": "3.0.0",
+  "lastUpdated": "",
+  "games": [
+    {
+      "id": "normal",
+      "name": "FREE FIRE NORMAL",
+      "badge": "NORMAL",
+      "description": "Versión Estándar / Clásica"
+    },
+    {
+      "id": "max",
+      "name": "FREE FIRE MAX",
+      "badge": "MAX HD",
+      "description": "Versión Ultra Gráficos HD"
+    }
+  ],
+  "categories": ["Todos", "General", "Sensibilidad", "Optimización", "Pantalla", "Especiales"],
+  "options": []
+}
