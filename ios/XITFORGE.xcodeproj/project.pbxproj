@@ -13,7 +13,7 @@
 		A100000000000004 /* ui.html in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000006 /* ui.html */; };
 /* End PBXBuildFile section */
 
-/* PBXFileReference section */
+/* Begin PBXFileReference section */
 		A200000000000001 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A200000000000002 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A200000000000003 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
@@ -24,42 +24,196 @@
 		A200000000000008 /* XITFORGE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XITFORGE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* PBXFrameworksBuildPhase section */
+/* Begin PBXFrameworksBuildPhase section */
 		A300000000000001 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
-/* PBXResourcesBuildPhase section */
-		A300000000000002 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ( A100000000000004 /* ui.html in Resources */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* Begin PBXResourcesBuildPhase section */
+		A300000000000002 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+			A100000000000004 /* ui.html in Resources */,
+		); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
-/* PBXSourcesBuildPhase section */
-		A300000000000003 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = ( A100000000000001 /* AppDelegate.m in Sources */, A100000000000002 /* WebViewController.m in Sources */, A100000000000003 /* main.m in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* Begin PBXSourcesBuildPhase section */
+		A300000000000003 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+			A100000000000001 /* AppDelegate.m in Sources */,
+			A100000000000002 /* WebViewController.m in Sources */,
+			A100000000000003 /* main.m in Sources */,
+		); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
-/* PBXGroup section */
-		A400000000000001 = {isa = PBXGroup; children = ( A400000000000002 /* XITFORGE */, A400000000000003 /* Products */, ); sourceTree = "<group>"; };
-		A400000000000002 /* XITFORGE */ = {isa = PBXGroup; children = ( A200000000000002 /* AppDelegate.h */, A200000000000001 /* AppDelegate.m */, A200000000000004 /* WebViewController.h */, A200000000000003 /* WebViewController.m */, A200000000000005 /* main.m */, A200000000000006 /* ui.html */, A200000000000007 /* Info.plist */, ); path = XITFORGE; sourceTree = "<group>"; };
-		A400000000000003 /* Products */ = {isa = PBXGroup; children = ( A200000000000008 /* XITFORGE.app */, ); name = Products; path = ""; sourceTree = "<group>"; };
+/* Begin PBXGroup section */
+		A400000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A400000000000002 /* XITFORGE */,
+				A400000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+
+		A400000000000002 /* XITFORGE */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000002 /* AppDelegate.h */,
+				A200000000000001 /* AppDelegate.m */,
+				A200000000000004 /* WebViewController.h */,
+				A200000000000003 /* WebViewController.m */,
+				A200000000000005 /* main.m */,
+				A200000000000006 /* ui.html */,
+				A200000000000007 /* Info.plist */,
+			);
+			path = XITFORGE;
+			sourceTree = "<group>";
+		};
+
+		A400000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000008 /* XITFORGE.app */,
+			);
+			name = Products;
+			path = "";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
-/* PBXNativeTarget section */
-		A500000000000001 /* XITFORGE */ = {isa = PBXNativeTarget; buildConfigurationList = A700000000000001 /* Build configuration list for PBXNativeTarget "XITFORGE" */; buildPhases = ( A300000000000003 /* Sources */, A300000000000002 /* Resources */, A300000000000001 /* Frameworks */, ); buildRules = ( ); dependencies = ( ); name = XITFORGE; productName = XITFORGE; productReference = A200000000000008 /* XITFORGE.app */; productType = "com.apple.product-type.application"; };
+/* Begin PBXNativeTarget section */
+		A500000000000001 /* XITFORGE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A700000000000001 /* Build configuration list for PBXNativeTarget "XITFORGE" */;
+			buildPhases = (
+				A300000000000003 /* Sources */,
+				A300000000000002 /* Resources */,
+				A300000000000001 /* Frameworks */,
+			);
+			buildRules = ( );
+			dependencies = ( );
+			name = XITFORGE;
+			productName = XITFORGE;
+			productReference = A200000000000008 /* XITFORGE.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
-/* PBXProject section */
-		A600000000000001 /* Project object */ = {isa = PBXProject; attributes = { LastUpgradeCheck = 1500; ORGANIZATIONNAME = XITFORGE; TargetAttributes = { A500000000000001 = { CreatedOnToolsVersion = 15.0; }; }; }; buildConfigurationList = A700000000000002 /* Build configuration list for PBXProject "XITFORGE" */; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = ( en, Base, ); mainGroup = A400000000000001; productRefGroup = A400000000000003 /* Products */; projectDirPath = ""; projectRoot = ""; targets = ( A500000000000001 /* XITFORGE */, ); };
+/* Begin PBXProject section */
+		A600000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1500;
+				ORGANIZATIONNAME = XITFORGE;
+				TargetAttributes = {
+					A500000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A700000000000002 /* Build configuration list for PBXProject "XITFORGE" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A400000000000001;
+			productRefGroup = A400000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A500000000000001 /* XITFORGE */,
+			);
+		};
 /* End PBXProject section */
 
-/* XCBuildConfiguration section */
-		A800000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = com.xitforge.app; INFOPLIST_FILE = XITFORGE/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_VERSION = 5.0; }; name = Debug; };
-		A800000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = com.xitforge.app; INFOPLIST_FILE = XITFORGE/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_VERSION = 5.0; }; name = Release; };
-		A800000000000003 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_WARN_INFINITE_RECURSION = YES; GCC_WARN_UNINITIALIZED_AUTOS = YES; ONLY_ACTIVE_ARCH = YES; SDKROOT = iphoneos; }; name = Debug; };
-		A800000000000004 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_WARN_INFINITE_RECURSION = YES; GCC_WARN_UNINITIALIZED_AUTOS = YES; SDKROOT = iphoneos; }; name = Release; };
+/* Begin XCBuildConfiguration section */
+		A800000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_INFINITE_RECURSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xitforge.app;
+				PRODUCT_NAME = XITFORGE;
+				EXECUTABLE_NAME = XITFORGE;
+				INFOPLIST_FILE = XITFORGE/Info.plist;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+
+		A800000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_INFINITE_RECURSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xitforge.app;
+				PRODUCT_NAME = XITFORGE;
+				EXECUTABLE_NAME = XITFORGE;
+				INFOPLIST_FILE = XITFORGE/Info.plist;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+
+		A800000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_INFINITE_RECURSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+
+		A800000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_INFINITE_RECURSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
-/* XCConfigurationList section */
-		A700000000000001 /* Build configuration list for PBXNativeTarget "XITFORGE" */ = {isa = XCConfigurationList; buildConfigurations = ( A800000000000001 /* Debug */, A800000000000002 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		A700000000000002 /* Build configuration list for PBXProject "XITFORGE" */ = {isa = XCConfigurationList; buildConfigurations = ( A800000000000003 /* Debug */, A800000000000004 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* Begin XCConfigurationList section */
+		A700000000000001 /* Build configuration list for PBXNativeTarget "XITFORGE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A800000000000001 /* Debug */,
+				A800000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+
+		A700000000000002 /* Build configuration list for PBXProject "XITFORGE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A800000000000003 /* Debug */,
+				A800000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
 	rootObject = A600000000000001 /* Project object */;
