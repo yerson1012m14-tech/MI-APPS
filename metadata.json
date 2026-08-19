@@ -1,0 +1,6 @@
+{
+  "name": "XITFORGE",
+  "description": "XITFORGE - Suite profesional de ingeniería iOS IPA, análisis binario, explorador GitHub y gestión de firmas Sideload.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
