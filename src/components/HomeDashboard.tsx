@@ -6,7 +6,6 @@ import {
   Check, 
   Zap, 
   ArrowRight,
-  ArrowLeft,
   RefreshCw,
   Gamepad2
 } from 'lucide-react';
@@ -60,12 +59,12 @@ export const HomeDashboard: React.FC = () => {
     }
   };
 
-  // VISTA 2: PANTALLA PRINCIPAL DESPUÉS DE CONFIRMAR
+  // VISTA 2: PANTALLA TOTALMENTE LIMPIA TRAS CONFIRMAR
   if (isConfirmed && selectedGame) {
     const isNormal = selectedGame === 'normal';
 
     return (
-      <div className="w-full max-w-lg mx-auto space-y-6 py-2 animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg mx-auto space-y-5 py-2 animate-in fade-in zoom-in-95 duration-200">
         {/* Barra superior con Juego Seleccionado & Botón para Cambiar */}
         <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg font-mono">
           <div className="flex items-center space-x-3">
@@ -109,8 +108,8 @@ export const HomeDashboard: React.FC = () => {
           </button>
         </div>
 
-        {/* Espacio limpio para agregar las nuevas funciones */}
-        <div className="w-full min-h-[300px] rounded-3xl border border-dashed border-slate-800/80 bg-slate-900/40 p-6 flex flex-col items-center justify-center text-center space-y-3">
+        {/* Espacio 100% limpio y despejado */}
+        <div className="w-full min-h-[320px] rounded-3xl border border-dashed border-slate-800/80 bg-slate-900/30 p-6 flex flex-col items-center justify-center text-center space-y-3">
           <div
             className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg border border-white/20 text-white"
             style={{ backgroundColor: `${theme.hex}30` }}
@@ -123,7 +122,7 @@ export const HomeDashboard: React.FC = () => {
               Panel de {isNormal ? 'Free Fire' : 'Free Fire MAX'}
             </h2>
             <p className="text-xs text-slate-400 font-mono max-w-xs">
-              Listo para agregar las herramientas y funciones que me indiques.
+              Espacio completamente limpio. Dime qué opciones o contenido exacto quieres poner aquí.
             </p>
           </div>
         </div>
@@ -156,7 +155,6 @@ export const HomeDashboard: React.FC = () => {
             boxShadow: selectedGame === 'normal' ? `0 10px 30px -10px ${theme.hex}50` : undefined,
           }}
         >
-          {/* Background glow on selected */}
           {selectedGame === 'normal' && (
             <div
               className="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[40px] pointer-events-none opacity-30"
@@ -166,12 +164,10 @@ export const HomeDashboard: React.FC = () => {
 
           <div className="space-y-2 relative z-10">
             <div className="flex items-center justify-between">
-              {/* Game Icon */}
               <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center text-white shadow-lg border border-white/20 shrink-0">
                 <Flame className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
 
-              {/* Selection Check Circle */}
               <div
                 className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all shrink-0 ${
                   selectedGame === 'normal'
@@ -227,7 +223,6 @@ export const HomeDashboard: React.FC = () => {
             boxShadow: selectedGame === 'max' ? `0 10px 30px -10px ${theme.hex}50` : undefined,
           }}
         >
-          {/* Background glow on selected */}
           {selectedGame === 'max' && (
             <div
               className="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[40px] pointer-events-none opacity-30"
@@ -237,12 +232,10 @@ export const HomeDashboard: React.FC = () => {
 
           <div className="space-y-2 relative z-10">
             <div className="flex items-center justify-between">
-              {/* Game Icon */}
               <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-purple-600 via-pink-600 to-red-500 flex items-center justify-center text-white shadow-lg border border-white/20 shrink-0">
                 <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
 
-              {/* Selection Check Circle */}
               <div
                 className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all shrink-0 ${
                   selectedGame === 'max'
@@ -286,7 +279,7 @@ export const HomeDashboard: React.FC = () => {
         </button>
       </div>
 
-      {/* BOTÓN DE CONFIRMAR (Aparece cuando seleccionas uno) */}
+      {/* BOTÓN DE CONFIRMAR */}
       {selectedGame && (
         <div className="pt-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
           <button
